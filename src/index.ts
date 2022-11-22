@@ -18,13 +18,13 @@ class Bank extends EventEmitter {
     this.persons[id] = { ...person }
     this.emit(Actions.register, person)
 
-    console.log(this.persons)
-
     return id
   }
 
   changeBalance(data: Data) {
-    [...this.persons, data]
+    
+    this.persons = [...this.persons, data]
+    
   }
 
   private add(data: Data): void {
@@ -106,4 +106,4 @@ const personId = bank.register({
 
 bank.emit(Actions.add, {personId, amount: 10 })
 // Задание со звёздочкой
-bank.emit(Actions.withdraw, { personId, amount: 23 })
+bank.emit(Actions.withdraw, { personId, amount: 223 })

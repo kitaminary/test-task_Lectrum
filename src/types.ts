@@ -15,15 +15,12 @@ interface Person {
 }
 
 interface Data {
-  name: string
+  name?: string
   personId?: number
   amount?: number
-  balance: number
+  balance?: number
 }
 
 interface Handler {
-  (person: any): void
-  (data: Data): void
-  (data: Data): void
-  (data: Data): void
+  (person: Person): void
 }

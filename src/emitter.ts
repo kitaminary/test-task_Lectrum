@@ -31,11 +31,9 @@ export class EventEmitter {
     return this
   }
 
-  emit(type: string, data: any) {
+  emit(type: string, data: Data) {
     const handlers = this.events[type]
 
-    console.log(data);
-    
     if (Array.isArray(handlers)) {
       handlers.forEach((handler) => handler(data))
     }
