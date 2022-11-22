@@ -1,3 +1,9 @@
+
+# Start
+
+use "npm install".
+after that use "npm start".
+
 # Задание
 
 *Покрыть типами `ts`-файлы находящиеся в папке `src`.*
