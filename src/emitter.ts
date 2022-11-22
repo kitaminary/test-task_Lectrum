@@ -4,7 +4,7 @@ export class EventEmitter {
   events = Object.create(null)
 
   constructor() {
-    this.on(Actions.register, (person: any): void => {
+    this.on(Actions.register, (person: Person): void => {
       console.log(`Пользователь ${person.name} был успешно зарегистрирован`)
     })
       .on(Actions.changeBalance, (data: Data) => {
