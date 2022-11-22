@@ -1,109 +1,76 @@
-// Для запуска файла использовать команду ts-node src/index.ts находясь в папке homeworks/2
-import { EventEmitter } from './emitter'
-import { Actions, Data, Person } from './types'
+import { EventEmitter } from "./emitter";
+import { Actions, Data, Person, Persons } from "./types";
 
 class Bank extends EventEmitter {
-  persons: Data[] = []
+  persons: Persons = {};
 
   constructor() {
-    super()
-    this.on(Actions.add, (data: Data) => {
-      return this.add(data)
-    })
+    super();
+    this.on(Actions.add, (data) => {
+      return this.add(data);
+    }).on(Actions.withdraw, (data) => {
+      return this.withdraw(data);
+    });
   }
 
-  register(person: Data): number {
-    const id = 1
+  register(person: Person): number {
+    const id = Date.now();
 
-    this.persons[id] = { ...person }
-    this.emit(Actions.register, person)
+    this.persons[id] = { ...person };
+    this.emit(Actions.register, person);
 
-    return id
-  }
-
-  changeBalance(data: Data) {
-    
-    this.persons = [...this.persons, data]
-    
+    return id;
   }
 
   private add(data: Data): void {
-    const { personId, amount } = data
+    const { personId, amount } = data;
 
-
-    if (personId === undefined) {
-      throw new Error('personId is required')
-    }
-
-    const person: Data = this.persons[personId]
-
-    if (!amount) {
-      throw new Error('Не указана сумма')
-    }
+    const person: Person = this.persons[personId];
 
     if (!person) {
-      throw new Error(`Пользователь с идентификатором ${personId} не найден`)
+      throw new Error(`Пользователь с идентификатором ${personId} не найден`);
     }
 
-    if (person.balance === undefined) {
-        throw new Error('Баланс не найден')
-    }
-
-    const balance = person.balance + amount
-
-    if (person.name === undefined) {
-      throw new Error('Имя является обязательным')
-    }
+    person.balance = person.balance + amount;
 
     this.emit(Actions.changeBalance, {
-    ...person,
       name: person.name,
-      amount: balance,
-    })
+      balance: person.balance,
+    });
   }
 
-  withdraw(data: Data): void {
-    const { personId, amount } = data
+  private withdraw(data: Data): void {
+    const { personId, amount } = data;
 
-    if (personId === undefined) {
-      throw new Error('personId is required')
-    }
-
-    const person: Data = this.persons[personId]
-
-    if (!amount) {
-      throw new Error('Не указана сумма')
-    }
+    const person: Person = this.persons[personId];
 
     if (!person) {
-      throw new Error(`Пользователь с идентификатором ${personId} не найден`)
+      throw new Error(`Пользователь с идентификатором ${personId} не найден`);
     }
 
-    if (person.balance === undefined) {
-        throw new Error('Баланс не найден')
+    if (person.balance <= 0 || person.balance < amount) {
+      throw new Error(`
+      Недостаточно средств на балансе.
+      Баланс: ${person.balance}
+      Сумма снятия: ${amount}`);
     }
 
-    const balance = person.balance - amount
-
-    if (person.name === undefined) {
-      throw new Error('Имя является обязательным')
-    }
+    person.balance = person.balance - amount;
 
     this.emit(Actions.changeBalance, {
-        ...person,
-        name: person.name,
-        amount: balance,
-    })
+      name: person.name,
+      balance: person.balance,
+    });
   }
 }
 
-const bank = new Bank()
+const bank = new Bank();
 
 const personId = bank.register({
-  name: 'Джон Доу',
+  name: "Джон Доу",
   balance: 100,
-})
+});
 
-bank.emit(Actions.add, {personId, amount: 10 })
-// Задание со звёздочкой
-bank.emit(Actions.withdraw, { personId, amount: 223 })
+bank.emit(Actions.add, { personId, amount: 1100 });
+
+bank.emit(Actions.withdraw, { personId, amount: 333 });

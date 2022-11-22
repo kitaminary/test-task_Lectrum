@@ -1,26 +1,31 @@
-export { Person, Data, Handler, Actions}
+export { Person, Actions, Persons, Data, Handler};
 
 enum Actions {
-  register = 'register',
-  changeBalance = 'changeBalance',
-  withdraw = 'withdraw',
-  add = 'add',
+  register = "register",
+  changeBalance = "changeBalance",
+  withdraw = "withdraw",
+  add = "add",
 }
 
 interface Person {
-  name: string
-  balance: number
-  amount?: number
-  personId?: number
+  name: string;
+  balance: number;
 }
 
 interface Data {
-  name?: string
-  personId?: number
-  amount?: number
-  balance?: number
+  personId: number;
+  amount: number;
 }
 
-interface Handler {
-  (person: Person): void
+interface Persons {
+  [key: string]: Person;
 }
+
+interface Generic {
+  personId: number;
+  amount: number;
+  name: string;
+  balance: number;
+}
+
+type Handler = (arg: Generic) => void

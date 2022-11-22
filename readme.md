@@ -1,8 +1,11 @@
 
-# Start
+# install package
 
 use "npm install".
-after that use "npm start".
+
+# Start
+
+use "npm start".
 
 # Задание
 
